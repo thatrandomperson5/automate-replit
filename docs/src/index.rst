@@ -30,10 +30,9 @@ Requirements
 Contents
 =========
 
-.. toctree::
+.. autosummary::
+    :toctree: index
+    :recursive:
 
-    api/client
-    api/user
-    api/queryResult
     
 
