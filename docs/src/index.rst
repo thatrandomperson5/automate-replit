@@ -16,7 +16,7 @@ Installation
 
 .. code-block:: bash
 
-   pip install automate-replit
+   pip install git+https://github.com/thatrandomperson5/automate-replit
 
 The library requires Python 3.8 or newer.
 
@@ -31,5 +31,8 @@ API
 ===
 
 .. automodule:: autoreplit
+   :imported-members:
    :members:
+   :undoc-members:
+   :show-inheritance:
 
