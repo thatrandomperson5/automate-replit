@@ -32,6 +32,8 @@ Contents
 
 .. toctree::
 
-    api
+    api/client
+    api/user
+    api/queryResult
     
 
