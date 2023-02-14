@@ -1,9 +1,7 @@
 User
 =====
 
-.. currentmodule:: autoreplit
-
-.. automodule:: classes.user
+.. automodule:: autoreplit.classes.user
    :members:
    :undoc-members:
    :show-inheritance:

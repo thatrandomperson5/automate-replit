@@ -1,9 +1,8 @@
 Query Result
 ================
 
-.. currentmodule:: autoreplit
 
-.. automodule:: classes.queryResult
+.. automodule:: autoreplit.classes.queryResult
    :members:
    :undoc-members:
    :show-inheritance:

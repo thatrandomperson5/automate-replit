@@ -1,8 +1,7 @@
 Client
 ========
 
-.. currentmodule:: autoreplit
-.. automodule:: client
+.. automodule:: autoreplit.client
    :members:
    :undoc-members:
    :show-inheritance:
