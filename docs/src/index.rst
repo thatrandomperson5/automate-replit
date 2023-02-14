@@ -5,7 +5,7 @@ Automate-replit
 Introduction
 ============
 
-This is an async api wrapper for `replit<https://replit.com>`_. It currently features:
+This is an async api wrapper for `replit <https://replit.com>`_. It currently features:
 
 - A working replit client
 - A User object wrapper
@@ -32,3 +32,4 @@ API
 
 .. automodule:: autoreplit
    :members:
+
