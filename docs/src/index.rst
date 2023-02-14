@@ -27,12 +27,11 @@ Requirements
 - aiohttp >= 3.8.0
 - aiolimiter >= 1.0.0
 
-API
-===
+Contents
+=========
 
-.. automodule:: autoreplit
-   :imported-members:
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+
+    api
+    
 
