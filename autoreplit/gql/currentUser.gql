@@ -1,0 +1,7 @@
+query UpgradeModal {
+	currentUser {
+		id
+		username
+        # cycles
+	}
+}

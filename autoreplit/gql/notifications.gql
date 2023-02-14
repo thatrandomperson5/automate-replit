@@ -1,0 +1,569 @@
+query notifications($after: String, $count: Int, $seen: Boolean) {
+  notifications(after: $after, count: $count, seen: $seen) {
+    items {
+      ...NotificationItems
+    }
+  }
+}
+
+fragment NotificationItems on Notification {
+  ... on BasicNotification {
+    id
+    ...BasicNotificationItemNotification
+    __typename
+  }
+  ... on MentionedInPostNotification {
+    id
+    ...NotificationItemMentionedInPostNotification
+    __typename
+  }
+  ... on RepliedToPostNotification {
+    id
+    ...NotificationItemRepliedToPostNotification
+    __typename
+  }
+  ... on MentionedInCommentNotification {
+    id
+    ...NotificationItemMentionedInCommentNotification
+    __typename
+  }
+  ... on RepliedToCommentNotification {
+    id
+    ...NotificationItemRepliedToCommentNotification
+    __typename
+  }
+  ... on AnswerAcceptedNotification {
+    id
+    ...NotificationItemAnswerAcceptedNotification
+    __typename
+  }
+  ... on MultiplayerInvitedNotification {
+    id
+    ...NotificationItemMultiplayerInvitedNotification
+    __typename
+  }
+  ... on MultiplayerJoinedEmailNotification {
+    id
+    ...NotificationItemMultiplayerJoinedEmailNotification
+    __typename
+  }
+  ... on MultiplayerJoinedLinkNotification {
+    id
+    ...NotificationItemMultiplayerJoinedLinkNotification
+    __typename
+  }
+  ... on MultiplayerOverlimitNotification {
+    id
+    ...NotificationItemMultiplayerOverlimitNotification
+    __typename
+  }
+  ... on WarningNotification {
+    id
+    ...NotificationItemWarningNotification
+    __typename
+  }
+  ... on AnnotationNotification {
+    id
+    ...NotificationItemAnnotationNotification
+    __typename
+  }
+  ... on ThreadNotification {
+    id
+    ...NotificationItemThreadNotification
+    __typename
+  }
+  ... on TeamInviteNotification {
+    id
+    ...NotificationItemTeamInviteNotification
+    __typename
+  }
+  ... on TeamOrganizationInviteNotification {
+    id
+    ...NotificationItemTeamOrganizationInviteNotification
+    __typename
+  }
+  ... on TeamTemplateSubmittedNotification {
+    id
+    ...NotificationTeamTemplateSubmittedNotification
+    __typename
+  }
+  ... on TeamTemplateReviewedStatusNotification {
+    id
+    ...NotificationTeamTemplateReviewedStatusNotification
+    __typename
+  }
+  ... on EditRequestCreatedNotification {
+    id
+    __typename
+  }
+  ... on EditRequestAcceptedNotification {
+    id
+    __typename
+  }
+  ... on ReplCommentCreatedNotification {
+    id
+    ...NotificationReplCommentCreatedNotification
+    __typename
+  }
+  ... on ReplCommentReplyCreatedNotification {
+    id
+    ...NotificationReplCommentReplyCreatedNotification
+    __typename
+  }
+  ... on ReplCommentMentionNotification {
+    id
+    ...NotificationReplCommentMentionNotification
+    __typename
+  }
+  ... on NewFollowerNotification {
+    id
+    ...NotificationItemNewFollower
+    __typename
+  }
+  ... on BountySubmissionReviewedNotification {
+    id
+    ...NotificationItemBountySubmissionReviewedNotification
+    __typename
+  }
+  ... on BountyNewSubmissionNotification {
+    id
+    ...NotificationItemBountyNewSubmissionNotification
+    __typename
+  }
+  ... on BountyApplicationReviewedNotification {
+    id
+    ...NotificationItemBountyApplicationReviewedNotification
+    __typename
+  }
+  ... on BountyNewApplicationNotification {
+    id
+    ...NotificationItemBountyNewApplicationNotification
+    __typename
+  }
+  ... on TipReceivedNotification {
+    id
+    ...NotificationItemTipReceivedNotification
+    __typename
+  }
+  __typename
+}
+
+fragment BasicNotificationItemNotification on BasicNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  context
+}
+
+fragment NotificationItemMentionedInPostNotification on MentionedInPostNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  post {
+    id
+    board {
+      id
+      ...NotificationItemBoard
+    }
+  }
+}
+
+fragment NotificationItemPost on Post {
+  id
+  title
+  url
+
+}
+
+fragment NotificationItemBoard on Board {
+  id
+  name
+  url
+  color
+  slug
+}
+
+fragment NotificationItemRepliedToPostNotification on RepliedToPostNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  comment {
+    id
+    post {
+      id
+      ...NotificationItemPost
+      board {
+        id
+        ...NotificationItemBoard
+      }
+    }
+  }
+}
+
+fragment NotificationItemMentionedInCommentNotification on MentionedInCommentNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  comment {
+    id
+    post {
+      id
+      ...NotificationItemPost
+      board {
+        id
+        ...NotificationItemBoard
+      }
+    }
+  }
+}
+
+fragment NotificationItemRepliedToCommentNotification on RepliedToCommentNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  comment {
+    id
+    post {
+      id
+      ...NotificationItemPost
+      board {
+        id
+        ...NotificationItemBoard
+      }
+    }
+  }
+}
+
+fragment NotificationItemAnswerAcceptedNotification on AnswerAcceptedNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  post {
+    id
+    ...NotificationItemPost
+    board {
+      id
+      ...NotificationItemBoard
+    }
+  }
+}
+
+fragment NotificationItemMultiplayerInvitedNotification on MultiplayerInvitedNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemMultiplayerJoinedEmailNotification on MultiplayerJoinedEmailNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemMultiplayerJoinedLinkNotification on MultiplayerJoinedLinkNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemMultiplayerOverlimitNotification on MultiplayerOverlimitNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemWarningNotification on WarningNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+}
+
+fragment NotificationItemAnnotationNotification on AnnotationNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemThreadNotification on ThreadNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  participants {
+    id
+    username
+  }
+  thread {
+    id
+    repl {
+      id
+      url
+      slug
+      nextPagePathname
+      user {
+        id
+        username
+      }
+    }
+  }
+}
+
+fragment NotificationItemTeamInviteNotification on TeamInviteNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  invite {
+    id
+    ...NotificationItemTeamInvite
+  }
+}
+
+fragment NotificationItemTeamInvite on TeamInvite {
+  id
+  team {
+    id
+    displayName
+    username
+  }
+}
+
+fragment NotificationItemTeamOrganizationInviteNotification on TeamOrganizationInviteNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  invite {
+    id
+    ...NotificationItemTeamOrganizationInvite
+  }
+}
+
+fragment NotificationItemTeamOrganizationInvite on TeamOrganizationInvite {
+  id
+  organization {
+    id
+    name
+  }
+}
+
+fragment NotificationTeamTemplateSubmittedNotification on TeamTemplateSubmittedNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  repl {
+    id
+    url
+  }
+}
+
+fragment NotificationTeamTemplateReviewedStatusNotification on TeamTemplateReviewedStatusNotification {
+  id
+  text
+  url
+  timeCreated
+  seen
+  repl {
+    id
+    url
+  }
+}
+
+fragment NotificationReplCommentCreatedNotification on ReplCommentCreatedNotification {
+  id
+  url
+  timeCreated
+  seen
+  replComment {
+    id
+    ...NotificationReplCommentNotificationReplComment
+  }
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationReplCommentNotificationReplComment on ReplComment {
+  id
+  repl {
+    id
+    title
+    url
+  }
+}
+
+fragment NotificationReplCommentReplyCreatedNotification on ReplCommentReplyCreatedNotification {
+  id
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  replComment {
+    id
+    ...NotificationReplCommentNotificationReplComment
+  }
+}
+
+fragment NotificationReplCommentMentionNotification on ReplCommentMentionNotification {
+  id
+  timeCreated
+  seen
+  creator {
+    id
+    username
+  }
+  replComment {
+    id
+    ...NotificationReplCommentNotificationReplComment
+  }
+}
+
+fragment NotificationItemNewFollower on NewFollowerNotification {
+  id
+  timeCreated
+  seen
+  url
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemBountySubmissionReviewedNotification on BountySubmissionReviewedNotification {
+  id
+  timeCreated
+  seen
+  url
+  creator {
+    username
+    id
+  }
+  isAccepted
+}
+
+fragment NotificationItemBountyNewSubmissionNotification on BountyNewSubmissionNotification {
+  id
+  timeCreated
+  seen
+  url
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemBountyApplicationReviewedNotification on BountyApplicationReviewedNotification {
+  id
+  timeCreated
+  seen
+  url
+  creator {
+    id
+    username
+  }
+  isAccepted
+}
+
+fragment NotificationItemBountyNewApplicationNotification on BountyNewApplicationNotification {
+  id
+  timeCreated
+  seen
+  url
+  creator {
+    id
+    username
+  }
+}
+
+fragment NotificationItemTipReceivedNotification on TipReceivedNotification {
+  id
+  url
+  timeCreated
+  seen
+  tip {
+    id
+    amount
+    sender {
+      id
+      username
+    }
+    
+  }
+  
+}
