@@ -32,7 +32,7 @@ Contents
 
 .. toctree::
     index
-    api
+    api/*
 
     
 
