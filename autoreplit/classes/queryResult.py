@@ -8,7 +8,7 @@ class ResultError(Exception):
 
 
 class QueryResultBase:
-    """The base object of QueryResult. It is also the base of all other result wrappers."""
+    """The base object of :class:`.QueryResult`. It is also the base of all other result wrappers."""
 
     __slots__ = ()
 
@@ -28,6 +28,6 @@ class QueryResultBase:
 
 
 class QueryResult(QueryResultBase):
-    """A un-slotted query result object for ``client.rawQuery()``"""
+    """A un-slotted query result object for :meth:`autoreplit.ReplitClient.rawQuery`"""
 
     pass
