@@ -3,6 +3,8 @@ API
 ====
 
 .. toctree::
+    :maxdepth: 10
+
     api/client
-    api/user
     api/queryResult
+    api/user

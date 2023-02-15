@@ -11,6 +11,8 @@ from typing import Optional, Dict, Any
 
 
 class RequestError(Exception):
+    """Replit api request error."""
+
     pass
 
 
@@ -132,8 +134,9 @@ class ReplitClient:
         query = querys["updatePresence"]
         await self.__gqlQuery(query, {}, "SitePresenceUpdate")
 
-    async def getNotifications(self, count: int=10, seen: bool=False):
+    async def getNotifications(self, count: int = 10, seen: bool = False):
         query = querys["notifications"]
-        result = await self.__gqlQuery(query, {"count": int, "seen": seen}, "notifications")
+        result = await self.__gqlQuery(
+            query, {"count": int, "seen": seen}, "notifications"
+        )
         return makeNotification(result)
-        

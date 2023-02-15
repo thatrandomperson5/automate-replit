@@ -1,1 +1,2 @@
 git+https://github.com/thatrandomperson5/automate-replit.git
+furo

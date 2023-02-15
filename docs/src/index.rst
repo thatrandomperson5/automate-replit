@@ -10,6 +10,7 @@ This is an async api wrapper for `replit <https://replit.com>`_. It currently fe
 - A working replit client
 - A User object wrapper
 - A Presence update function
+- A raw gql interface
 
 Installation
 ------------
@@ -31,7 +32,11 @@ Contents
 =========
 
 .. toctree::
+    :maxdepth: 10
 
+    index
     api
+
+
     
 
