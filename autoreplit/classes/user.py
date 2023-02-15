@@ -6,6 +6,8 @@ from typing import Dict, List, Optional
 
 @dataclass
 class Social:
+    """Social contact object, like ``"GITHUB"``"""
+
     id: int
     url: str
     type: str
@@ -13,6 +15,8 @@ class Social:
 
 @dataclass
 class Role:
+    """A role object, provides role id, name, key and tagline."""
+
     id: str
     name: str
     key: str
@@ -21,6 +25,8 @@ class Role:
 
 @dataclass
 class SimpleUser:
+    """A simple user object, provides username and id."""
+
     username: str
     id: str
 
@@ -28,8 +34,8 @@ class SimpleUser:
 class User(QueryResultBase):
     """The user object. Contains user data."""
 
-    id: int  # User's id
-    username: str  # User's username
+    id: int  #: User's id
+    username: str  #: User's username
     image: str  #: User's pfp
     url: str  #: Path to the users profile
     followerCount: int  #: How many followers the user has
@@ -59,7 +65,7 @@ class User(QueryResultBase):
     #: The values are of the :class:`.Social` class.
     socials: Dict[str, Social]
 
-    __slots__ = locals()['__annotations__'].keys()
+    __slots__ = locals()["__annotations__"].keys()
 
     def __makePublicRepls(self):
         pr = self.publicRepls
