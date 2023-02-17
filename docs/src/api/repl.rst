@@ -2,7 +2,7 @@ Replit Projects
 ================
 
 
-.. automodule:: autoreplit.classes.repls
+.. automodule:: autoreplit.classes.repl
    :members:
    :undoc-members:
    :show-inheritance:

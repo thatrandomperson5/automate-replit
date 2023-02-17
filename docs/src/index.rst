@@ -60,7 +60,9 @@ Contents
 
 .. toctree::
 
+    Home <http://automate-replit.rtfd.io/>
     api
+
 
 
     
