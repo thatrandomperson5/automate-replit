@@ -32,7 +32,7 @@ async def main():
     print(user.socials["github"])
     print(user.id)
     assert user.isFollowedByCurrentUser == False
-    # await getEthan()
+    await getEthan()
     await notif()
 
 

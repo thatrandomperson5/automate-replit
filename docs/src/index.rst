@@ -59,9 +59,7 @@ Contents
 =========
 
 .. toctree::
-    :maxdepth: 10
 
-    index
     api
 
 
