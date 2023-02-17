@@ -48,20 +48,28 @@ class User(QueryResultBase):
     hasPrivacyRole: bool  #: Replit students under the age of 13 (probably)
     userSubscriptionType: Optional[
         str
-    ]  #: User's plan, eg. `"HACKER"`. `None` if the user has no plan
+    ]  #: User's plan, eg. ``"HACKER"``. ``None`` if the user has no plan
 
-    #: A dictonary of roles, keys are the role key, eg. `"MODERATOR"`.
+    #: A dictonary of roles, keys are the role key, eg. ``"MODERATOR"``.
     #: The values are of the :class:`.Role` class.
     roles: Dict[str, Role]
 
     publicRepls: List[str]  #: A list of the user's public repl's ids.
     presenceStatus: None  #: :meta private:
-    isOnline: bool  #: `True` if the user is online
-    lastSeen: Optional[
-        str
-    ]  #: `None` if the user is online, Date-Time str if user is offline.
 
-    #: A dictonary of social contacts, keys are the social type, eg. `"github"`.
+    #: ``True`` if the user is online
+    #:
+    #: .. note::
+    #:   Always ``False`` if no SID is provided.
+    isOnline: bool
+
+    #: ``None`` if the user is online, Date-Time str if user is offline.
+    #:
+    #: .. note::
+    #:   Always ``None`` if no SID is provided.
+    lastSeen: Optional[str]
+
+    #: A dictonary of social contacts, keys are the social type, eg. ``"github"``.
     #: The values are of the :class:`.Social` class.
     socials: Dict[str, Social]
 

@@ -1,13 +1,13 @@
 import asyncio, aiohttp, aiolimiter
 from .querys import querys
 from .classes.user import User, SimpleUser
-from .classes.queryResult import QueryResult
+from .classes.queryResult import QueryResult, QueryResultBase
 from .classes.notifications import makeNotification
 
 # Typing
 from types import CoroutineType
 from .commonTyping import JsonType
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 
 class RequestError(Exception):
@@ -107,9 +107,9 @@ class ReplitClient:
     async def rawQuery(
         self, queryname: str, query: str, vars: JsonType = {}
     ) -> QueryResult:
-        """Use a raw grahpql query on the api. Returns a QueryResult object.
+        """Use a raw gql query on the api. Returns a QueryResult object.
 
-        :param queryname: The name of the query, for example `UserByUsername`
+        :param queryname: The name of the query, for example ``UserByUsername``
         :param query: The actual graphql query
         :param vars: The variable params passed to the query
         """
@@ -123,20 +123,22 @@ class ReplitClient:
         return User(result)
 
     async def getCurrentUser(self) -> SimpleUser:
-        """Get the current user. Returns a SimpleUser"""
+        """Get the current user. Returns a ``SimpleUser``"""
         query = querys["currentUser"]
         result = await self.__gqlQuery(query, {}, "UpgradeModal")
         result = result["data"]["currentUser"]
         return SimpleUser(result["username"], result["id"])
 
     async def updatePresence(self) -> None:
-        """Update your bot's presence, will set you to "Online"""
+        """Update your bot's presence, will set you to ``Online``"""
         query = querys["updatePresence"]
         await self.__gqlQuery(query, {}, "SitePresenceUpdate")
 
-    async def getNotifications(self, count: int = 10, seen: bool = False):
+    async def getNotifications(
+        self, count: int = 10, seen: bool = False
+    ) -> List[QueryResultBase]:
         query = querys["notifications"]
         result = await self.__gqlQuery(
-            query, {"count": int, "seen": seen}, "notifications"
+            query, {"count": count, "seen": seen}, "notifications"
         )
         return makeNotification(result)

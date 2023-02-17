@@ -17,6 +17,12 @@ async def getEthan():
     print(ethan)
 
 
+async def notif():
+    notifs = await client.getNotifications(20, True)
+    for item in notifs:
+        print(item)
+
+
 async def main():
     current = await client.getCurrentUser()
     print(f"Logged in as {current.username}")
@@ -26,7 +32,8 @@ async def main():
     print(user.socials["github"])
     print(user.id)
     assert user.isFollowedByCurrentUser == False
-    await getEthan()
+    # await getEthan()
+    await notif()
 
 
 print()

@@ -448,7 +448,6 @@ fragment NotificationReplCommentCreatedNotification on ReplCommentCreatedNotific
   timeCreated
   seen
   replComment {
-    id
     ...NotificationReplCommentNotificationReplComment
   }
   creator {
