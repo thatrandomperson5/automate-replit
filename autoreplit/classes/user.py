@@ -68,11 +68,17 @@ class User(QueryResultBase):
     #: .. note::
     #:   Always ``None`` if no SID is provided.
     lastSeen: Optional[str]
-    bio: str #: User description
+    bio: str  #: User description
 
     #: A dictonary of social contacts, keys are the social type, eg. ``"github"``.
     #: The values are of the :class:`.Social` class.
     socials: Dict[str, Social]
+
+    firstName: Optional[str]
+    lastName: Optional[str]
+    locale: str
+    isVerified: bool
+    displayName: str
 
     __slots__ = locals()["__annotations__"].keys()
 

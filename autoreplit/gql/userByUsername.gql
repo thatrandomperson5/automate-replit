@@ -12,6 +12,11 @@ query UserByUsername($username: String!) {
         isBlockedByCurrentUser
         isBlockingCurrentUser
         fullName 
+		firstName
+		lastName
+		locale
+		isVerified
+		displayName
         hasPrivacyRole
         userSubscriptionType
         roles {

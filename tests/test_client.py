@@ -8,6 +8,7 @@ client = autoreplit.ReplitClient(sid)
 async def getEthan():
     ethan = await client.getUserByName("not-ethan")
     print(f"Ethan's id: {ethan.id}")
+    print(f"Ethan's bio: {ethan.bio}")
     print(f"Ethan's follower count: {ethan.followerCount}")
     if ethan.isOnline:
         print("Ethan is online!")
