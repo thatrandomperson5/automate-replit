@@ -2,6 +2,7 @@ query UserByUsername($username: String!) {
 	userByUsername(username: $username) {
 		id
 		username
+        bio
         image
         url
         followerCount

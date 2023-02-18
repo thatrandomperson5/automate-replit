@@ -68,6 +68,7 @@ class User(QueryResultBase):
     #: .. note::
     #:   Always ``None`` if no SID is provided.
     lastSeen: Optional[str]
+    bio: str #: User description
 
     #: A dictonary of social contacts, keys are the social type, eg. ``"github"``.
     #: The values are of the :class:`.Social` class.
