@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 @dataclass
 class Social:
-    """Social contact object, like ``"GITHUB"``"""
+    """Social contact object, like ``"github"``"""
 
     id: int
     url: str
@@ -15,7 +15,7 @@ class Social:
 
 @dataclass
 class Role:
-    """A role object, provides role id, name, key and tagline."""
+    """A role object, provides role id, name, key and tagline. Keys are all caps."""
 
     id: str
     name: str
