@@ -63,7 +63,7 @@ class User(QueryResultBase):
     #:   Always ``False`` if no SID is provided.
     isOnline: bool
 
-    #: ``None`` if the user is online, Date-Time str if user is offline.
+    #: Date-Time str of the users last status update.
     #:
     #: .. note::
     #:   Always ``None`` if no SID is provided.
