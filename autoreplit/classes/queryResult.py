@@ -41,4 +41,12 @@ class QueryResultBase(metaclass=ABCMeta):
 class QueryResult(QueryResultBase):
     """A un-slotted query result object for :meth:`autoreplit.ReplitClient.rawQuery`"""
 
-    pass
+    def __init__(self, opname: Optional[str], json: JsonType) -> None:
+        # Tmp-fix, reduntant
+        if not opname is None:
+            data = json["data"][opname]
+        else:
+            data = json
+        self.__slots__ = data.keys()
+        super().__init__(opname, json)
+        

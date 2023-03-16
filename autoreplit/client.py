@@ -114,6 +114,7 @@ class ReplitClient:
         :param vars: The variable params passed to the query
         """
         json = await self.__gqlQuery(query, vars, queryname)
+        # print(json)
         return QueryResult(queryname, json)
 
     async def getUserByName(self, name: str) -> User:

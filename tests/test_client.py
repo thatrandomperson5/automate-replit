@@ -5,6 +5,22 @@ sid = os.getenv("sid")
 client = autoreplit.ReplitClient(sid)
 
 
+transformer = """
+query Repl($id: String, $url: String) {
+repl(id: $id, url: $url) {
+...on Repl {
+  id
+  title
+  slug
+}
+}}"""
+
+
+async def testRaw(id: str):
+    repl = await client.rawQuery("repl", transformer, {"id": id})
+    print(repl)
+
+
 async def getEthan():
     ethan = await client.getUserByName("not-ethan")
     print(f"Ethan's id: {ethan.id}")
@@ -35,7 +51,7 @@ async def main():
     assert user.isFollowedByCurrentUser == False
     await getEthan()
     await notif()
-
+    await testRaw(user.publicRepls[0])
 
 print()
 client.run(main())
