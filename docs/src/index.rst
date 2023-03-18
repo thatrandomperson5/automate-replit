@@ -55,6 +55,13 @@ Here is an example ethan-getter
     client.run(getEthan())
 
 
+Notes
+========
+
+.. note::
+    Using `asyncio.gather` or another async concurrent method will increase preformance by
+    grouping requests into groups of 5.
+
 
 Contents
 =========

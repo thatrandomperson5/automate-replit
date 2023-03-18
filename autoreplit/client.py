@@ -3,12 +3,16 @@ from .querys import querys
 from .classes.user import User, SimpleUser
 from .classes.queryResult import QueryResult, QueryResultBase
 from .classes.notifications import makeNotification
-
+from dataclasses import dataclass
 # Typing
 from types import CoroutineType
 from .commonTyping import JsonType
 from typing import Optional, Dict, Any, List
 
+@dataclass
+class CachedRequest:
+    fut: asyncio.Future
+    json: JsonType
 
 class RequestError(Exception):
     """Replit api request error."""
@@ -49,7 +53,46 @@ class ReplitClient:
             "sec-gpc": "1",
             "x-requested-with": "XMLHttpRequest",
         }
-        self.limiter = aiolimiter.AsyncLimiter(5)  # Current rate-limit is 5/s
+        self.limiter = aiolimiter.AsyncLimiter(5, 1)  # Current rate-limit is 5/s
+        self.requestCache: List[CachedRequest] = []
+
+    async def __clearCache(self) -> None:
+        """Clear the cache and request data in groups of 5"""
+        amount = min(5, len(self.requestCache))
+        session = self.client
+        rqs = self.requestCache[:amount]
+        del self.requestCache[:amount]
+        if len(rqs) == 0:
+            return
+        # print("Emptying cached objects")
+        rjson = [rq.json for rq in rqs]
+        async with session.post(
+            "https://replit.com/graphql", json=rjson, headers=self.headers
+        ) as response:
+            if response.status != 200:
+                raise RequestError(await response.text())  # Raise request errors
+            json = await response.json()
+            # print("Packed and requested:", len(json), ". Futures left:", len(self.requestCache))
+            for result, rq in zip(json, rqs):
+                if "errors" in result:  # Raise other errors
+                    rq.fut.set_exception(RequestError(result["errors"]["message"]))
+                else:
+                    rq.fut.set_result(result)
+
+    async def __request(self) -> bool:
+        """Request a cache clearing, returns false if the request was dissmissed."""
+        # print("Request: Awaiting limiter", self.limiter.has_capacity())
+        if len(self.requestCache) < 1:
+            # print("Request Dismissed")
+            return False
+        await self.limiter.acquire()
+        # print("Limiter aquired")
+        if len(self.requestCache) > 0:
+            # print("Clearing cache")
+            await self.__clearCache()
+            return True
+        return False
+            
 
     async def start(self) -> None:
         """Start the client, needs to be used first, before any other functions.
@@ -84,25 +127,22 @@ class ReplitClient:
 
         asyncio.run(inner())
 
-    async def __gqlQuery(
+    def __gqlQuery(
         self, query: str, vars: JsonType, opname: Optional[str] = None
-    ) -> JsonType:
-        # Query replut graphql
+    ) -> asyncio.Future[JsonType]:
+        # Query replit graphql
         json: Dict[str, Any] = {}
         if opname != None:
             json["operationName"] = opname
         json = {"query": query, "variables": vars}
-        session = self.client
-        await self.limiter.acquire()  # Rate-limit
-        async with session.post(
-            "https://replit.com/graphql", json=json, headers=self.headers
-        ) as response:
-            if response.status != 200:
-                raise RequestError(await response.text())  # Raise request errors
-            json = await response.json()
-            if "errors" in json:  # Raise other errors
-                raise RequestError(json["errors"]["message"])
-            return json
+        
+        loop = asyncio.get_running_loop()
+        fut = loop.create_future()
+        self.requestCache.append(CachedRequest(fut, json))
+        # print("Added to cache, now requesting")
+        loop.create_task(self.__request())
+        return fut
+        
 
     async def rawQuery(
         self, queryname: str, query: str, vars: JsonType = {}

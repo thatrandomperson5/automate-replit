@@ -1,5 +1,5 @@
 # Tests
-import autoreplit, os
+import autoreplit, os, asyncio
 
 sid = os.getenv("sid")
 client = autoreplit.ReplitClient(sid)
@@ -16,7 +16,7 @@ repl(id: $id, url: $url) {
 }}"""
 
 
-async def testRaw(id: str):
+async def tRaw(id: str):
     repl = await client.rawQuery("repl", transformer, {"id": id})
     print(repl)
 
@@ -51,7 +51,9 @@ async def main():
     assert user.isFollowedByCurrentUser == False
     await getEthan()
     await notif()
-    await testRaw(user.publicRepls[0])
+    print(len(user.publicRepls))
+    await asyncio.gather(*[tRaw(id) for id in user.publicRepls])
+    print("Tests done!")
 
 print()
 client.run(main())
