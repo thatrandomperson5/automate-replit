@@ -59,7 +59,7 @@ Notes
 ========
 
 .. note::
-    Using `asyncio.gather` or another async concurrent method will increase preformance by
+    Using :meth:`asyncio.gather` or another async concurrent method will increase preformance by
     grouping requests into groups of 5.
 
 

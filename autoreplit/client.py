@@ -11,6 +11,7 @@ from typing import Optional, Dict, Any, List
 
 @dataclass
 class CachedRequest:
+    """A cached request for better preformance."""
     fut: asyncio.Future
     json: JsonType
 
