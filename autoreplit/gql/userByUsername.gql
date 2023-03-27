@@ -32,6 +32,8 @@ query UserByUsername($username: String!) {
         publicRepls(showUnnamed: true) {
             items {
                 id
+                title
+                url
             }
         }
         socials {

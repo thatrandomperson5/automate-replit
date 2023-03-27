@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from ..commonTyping import JsonType
 from .queryResult import QueryResultBase
+from .repl import BasicRepl
 from typing import Dict, List, Optional
 
 
@@ -54,7 +55,7 @@ class User(QueryResultBase):
     #: The values are of the :class:`.Role` class.
     roles: Dict[str, Role]
 
-    publicRepls: List[str]  #: A list of the user's public repl's ids.
+    publicRepls: List[BasicRepl]  #: A list of the user's public repl's ids.
     presenceStatus: None  #: :meta private:
 
     #: ``True`` if the user is online
@@ -86,7 +87,7 @@ class User(QueryResultBase):
         pr = self.publicRepls
         self.publicRepls = []
         for item in pr["items"]:
-            self.publicRepls.append(item["id"])
+            self.publicRepls.append(BasicRepl(item["id"], item["title"], item["url"]))
 
     def __makePresenceStatus(self):
         for k, v in self.presenceStatus.items():

@@ -25,9 +25,10 @@ class CommonNotif(QueryResultBase):
         json["type"] = json["__typename"]
         del json["__typename"]
         super().__init__(None, json)
-        self.creator = SimpleUser(
-            cast(JsonType, self.creator)["username"], cast(JsonType, self.creator)["id"]
-        )
+        if not self.creator is None:
+            self.creator = SimpleUser(
+                cast(JsonType, self.creator)["username"], cast(JsonType, self.creator)["id"]
+            )
         if not self.replComment is None:
             self.replComment = BasicComment(cast(JsonType, self.replComment))
 
