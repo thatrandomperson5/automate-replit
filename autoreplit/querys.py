@@ -14,4 +14,5 @@ querys = {
     "updatePresence": readFile("gql/updatePresence.gql"),
     "currentUser": readFile("gql/currentUser.gql"),
     "notifications": readFile("gql/notifications.gql"),
+    "repl": readFile("gql/repl.gql")
 }

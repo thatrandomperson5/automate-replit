@@ -3,7 +3,8 @@ from .querys import querys
 from .classes.user import User
 from .classes.basic import SimpleUser
 from .classes.queryResult import QueryResult, QueryResultBase
-from .classes.notifications import makeNotification
+from .classes.notifications import makeNotification, UnidentifiedNotif, CommonNotif
+from .classes.repl import Repl
 from dataclasses import dataclass
 # Typing
 from types import CoroutineType
@@ -73,21 +74,31 @@ class ReplitClient:
         ) as response:
             print("Request made")
             if response.status != 200:
+                errText = await response.text()
                 for rq in rqs:
-                    rq.fut.set_exception(RequestError(await response.text()))  # Raise request errors for the batch
+                    rq.fut.set_exception(RequestError(errText))  # Raise request errors for the batch
+                    # assert rq.fut.done()
+                    self.requestCache.remove(rq.fut)
                 print("Futures Errored")
-                del self.requestCache[:amount]
+                # del self.requestCache[:amount]
                 return 
+
             json = await response.json()
+            # print("Json parsed")
             # print("Packed and requested:", len(json), ". Futures left:", len(self.requestCache))
             for result, rq in zip(json, rqs):
+                print("Handling future")
                 if "errors" in result:  # Raise other errors
                     rq.fut.set_exception(RequestError(result["errors"]["message"]))
+                    print(rq.fut.done())
                 else:
                     rq.fut.set_result(result)
+                # assert self.requestCache.find(rq.fut).done()
+                self.requestCache.remove(rq.fut)
+                print("Future handled")
 
             print("Futures resolved")
-            del self.requestCache[:amount]
+            # del self.requestCache[:amount]
 
     async def __request(self) -> bool:
         """Request a cache clearing, returns false if the request was dissmissed."""
@@ -187,9 +198,19 @@ class ReplitClient:
         query = querys["updatePresence"]
         await self.__gqlQuery(query, {}, "SitePresenceUpdate")
 
+    async def getReplById(self, id: str) -> Repl:
+        query = querys["repl"]
+        result = await self.__gqlQuery(query, {"id": id}, "repl")
+        return Repl(result)
+
+    async def getReplByUrl(self, url: str) -> Repl:
+        query = querys["repl"]
+        result = await self.__gqlQuery(query, {"url": url}, "repl")
+        return Repl(result)
+
     async def getNotifications(
         self, count: int = 10, seen: bool = False
-    ) -> List[QueryResultBase]:
+    ) -> List[CommonNotif | UnidentifiedNotif]:
         """Get ``count`` amount of notifications for the current user."""
         query = querys["notifications"]
         result = await self.__gqlQuery(

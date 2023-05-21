@@ -81,7 +81,7 @@ class User(QueryResultBase):
         pr = self.publicRepls
         self.publicRepls = []
         for item in pr["items"]:
-            self.publicRepls.append(BasicRepl(item["id"], item["title"], item["url"]))
+            self.publicRepls.append(BasicRepl(item["id"], item["url"], item["title"]))
 
     def __makePresenceStatus(self):
         for k, v in self.presenceStatus.items():

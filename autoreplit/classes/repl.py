@@ -72,5 +72,5 @@ class Repl(QueryResultBase):
     __slots__ = locals()["__annotations__"].keys()
 
 
-    def __init__(self, data: JsonType, pathName: str = "userByUsername") -> None:
+    def __init__(self, data: JsonType, pathName: str = "repl") -> None:
         super().__init__(pathName, data)

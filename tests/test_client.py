@@ -40,6 +40,12 @@ async def notif():
         print(item)
 
 
+async def repl():
+    print("Getting repl")
+    r = await client.getReplByUrl("https://replit.com/@dragonhunter1/ChooseNim")
+    assert r == await client.getReplById(r.id)
+
+
 async def main():
     current = await client.getCurrentUser()
     print(f"Logged in as {current.username}")
@@ -52,6 +58,7 @@ async def main():
     await getEthan()
     await notif()
     print(len(user.publicRepls))
+    await repl()
     await asyncio.gather(*[tRaw(id) for id in user.publicRepls])
     print("Tests done!")
 
