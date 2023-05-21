@@ -150,6 +150,7 @@ class ReplitClient:
         asyncio.run(inner())
 
     def __checkTask(self, task):
+        task.remove_done_callback(self.__checkTask)
         assert task.result() == None
 
     def __gqlQuery(
