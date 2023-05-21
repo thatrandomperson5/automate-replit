@@ -149,6 +149,9 @@ class ReplitClient:
 
         asyncio.run(inner())
 
+    def __checkTask(self, task):
+        assert task.result() == None
+
     def __gqlQuery(
         self, query: str, vars: JsonType, opname: Optional[str] = None
     ) -> asyncio.Future[JsonType]:
@@ -162,7 +165,8 @@ class ReplitClient:
         fut = loop.create_future()
         self.requestCache.append(CachedRequest(fut, json))
         # print("Added to cache, now requesting")
-        loop.create_task(self.__request())
+        task = loop.create_task(self.__request())
+        task.add_done_callback(self.__checkTask)
         # await self.__request()
         return fut
         
