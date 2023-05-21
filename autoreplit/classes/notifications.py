@@ -1,9 +1,8 @@
 from ..commonTyping import JsonType
-from .user import SimpleUser
+from .basic import SimpleUser, BasicComment
 from .queryResult import QueryResultBase
 from typing import List, Optional, cast
 from warnings import warn
-from .comments import BasicComment
 
 
 class CommonNotif(QueryResultBase):

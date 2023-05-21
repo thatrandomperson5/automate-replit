@@ -1,0 +1,182 @@
+query Repl($id: String, $url: String) {
+  repl(id: $id, url: $url) {
+    ... on Repl {
+      id
+      isProject
+      isPrivate
+      isStarred
+      title
+      slug
+      imageUrl
+      folderId
+      isRenamed
+      commentCount
+      likeCount
+      currentUserDidLike
+      templateCategory
+      wasPosted
+      wasPublished
+      layoutState
+      language
+      owner: user {
+        id
+        username
+      }
+      origin {
+        id
+        title
+        url # Possibly?
+      }
+      lang {
+        id
+        displayName
+        canUseShellRunner
+      }
+      iconUrl
+      templateLabel
+      url
+      inviteUrl
+      multiplayerInvites {
+        email
+        replId
+        type
+      }
+      rootOriginReplUrl
+      timeCreated
+      timeUpdated
+      isOwner
+      config {
+        isServer
+        gitRemoteUrl
+        domain
+        isVnc
+        doClone
+      }
+      pinnedToProfile
+      size
+      hostedUrl
+      hostedUrlDotty: hostedUrl(dotty: true)
+      hostedUrlDev: hostedUrl(dev: true)
+      hostedUrlNoCustom: hostedUrl(noCustomDomain: true)
+      terminalUrl
+      currentUserPermissions {
+        changeTitle
+        changeDescription
+        changeImageUrl
+        changeIconUrl
+        changeTemplateLabel
+        changeLanguage
+        changeConfig
+        changePrivacy
+        star
+        pin
+        move
+        delete
+        leaveMultiplayer
+        editMultiplayers
+        viewHistory
+        containerAttach
+        containerWrite
+        changeAlwaysOn
+        linkDomain
+        writeTests
+        changeCommentSettings
+        inviteGuests
+        publish
+        fork
+      }
+      database {
+        id
+        keysCount
+        sizeMB
+        jwt
+      }
+      template {
+        id
+      }
+      isProjectFork
+      isModelSolution
+      isModelSolutionFork
+      workspaceCta
+    #
+    #  submission {
+    #    id
+   #     timeSubmitted
+   #     timeLastReviewed
+    #    isGroupSubmission
+    #    author {
+    #      username
+    #    }
+    #    submissionGroup {
+    #      users {
+    #        username
+    #      }
+    #    }
+    #  }
+      commentSettings {
+        id
+        enabled
+      }
+      publicForkCount
+      runCount
+      isAlwaysOn
+      isBoosted
+      tags {
+        id
+        isOfficial
+      }
+      lastPublishedAt
+      multiplayers {
+        username
+      }
+      nixedLanguage
+      publishedAs
+      attachments {
+        id
+        fileName
+        mimeType
+        timeCreated
+        timeUpdated
+        contents
+      }
+      description(plainText: true)
+      markdownDescription: description(plainText: false)
+      hasExplainCode
+      hasGenerateCode
+      templateInfo {
+        label
+        iconUrl
+      }
+      domains {
+        domain
+        state
+      }
+      # apexProxy
+      replViewSettings {
+        id
+        defaultView
+        replFile
+        replImage
+      }
+    #  powerUpCosts {
+    #    ... on UnauthorizedError {
+    #      message
+    #    }
+    #    ... on NotFoundError {
+    #      message
+    #    }
+    #    ... on PowerUpCostsType {
+    #      boost {
+    #        cycles
+    #        explanation
+    #      }
+    #      alwaysOn {
+    #        cycles
+    #        explanation
+    #      }
+    #    }
+    #  }
+      isTutorial
+    }
+  }
+}

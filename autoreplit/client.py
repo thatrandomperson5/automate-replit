@@ -1,6 +1,7 @@
 import asyncio, aiohttp, aiolimiter
 from .querys import querys
-from .classes.user import User, SimpleUser
+from .classes.user import User
+from .classes.basic import SimpleUser
 from .classes.queryResult import QueryResult, QueryResultBase
 from .classes.notifications import makeNotification
 from dataclasses import dataclass
@@ -56,22 +57,27 @@ class ReplitClient:
         }
         self.limiter = aiolimiter.AsyncLimiter(5, 1)  # Current rate-limit is 5/s
         self.requestCache: List[CachedRequest] = []
+        # self.activeRequestCalls: int = 0
 
     async def __clearCache(self) -> None:
         """Clear the cache and request data in groups of 5"""
         amount = min(5, len(self.requestCache))
         session = self.client
         rqs = self.requestCache[:amount]
-        del self.requestCache[:amount]
         if len(rqs) == 0:
             return
-        # print("Emptying cached objects")
+        print("Emptying cached objects")
         rjson = [rq.json for rq in rqs]
         async with session.post(
             "https://replit.com/graphql", json=rjson, headers=self.headers
         ) as response:
+            print("Request made")
             if response.status != 200:
-                raise RequestError(await response.text())  # Raise request errors
+                for rq in rqs:
+                    rq.fut.set_exception(RequestError(await response.text()))  # Raise request errors for the batch
+                print("Futures Errored")
+                del self.requestCache[:amount]
+                return 
             json = await response.json()
             # print("Packed and requested:", len(json), ". Futures left:", len(self.requestCache))
             for result, rq in zip(json, rqs):
@@ -80,18 +86,23 @@ class ReplitClient:
                 else:
                     rq.fut.set_result(result)
 
+            print("Futures resolved")
+            del self.requestCache[:amount]
+
     async def __request(self) -> bool:
         """Request a cache clearing, returns false if the request was dissmissed."""
-        # print("Request: Awaiting limiter", self.limiter.has_capacity())
+        print("Request: Awaiting limiter", self.limiter.has_capacity())
         if len(self.requestCache) < 1:
-            # print("Request Dismissed")
+            print("Request Dismissed")
             return False
         await self.limiter.acquire()
-        # print("Limiter aquired")
+        print("Limiter aquired")
         if len(self.requestCache) > 0:
             # print("Clearing cache")
             await self.__clearCache()
+            
             return True
+
         return False
             
 
@@ -179,6 +190,7 @@ class ReplitClient:
     async def getNotifications(
         self, count: int = 10, seen: bool = False
     ) -> List[QueryResultBase]:
+        """Get ``count`` amount of notifications for the current user."""
         query = querys["notifications"]
         result = await self.__gqlQuery(
             query, {"count": count, "seen": seen}, "notifications"

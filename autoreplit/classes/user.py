@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from ..commonTyping import JsonType
 from .queryResult import QueryResultBase
-from .repl import BasicRepl
+from .basic import BasicRepl
 from typing import Dict, List, Optional
 
 
@@ -24,12 +24,6 @@ class Role:
     tagline: str
 
 
-@dataclass
-class SimpleUser:
-    """A simple user object, provides username and id."""
-
-    username: str
-    id: str
 
 
 class User(QueryResultBase):
