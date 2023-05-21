@@ -1,7 +1,7 @@
 Basic Classes
 ===============
 
-.. automodule:: autoreplit.classses.basic
+.. automodule:: autoreplit.classes.basic
    :members:
    :undoc-members:
    :show-inheritance:

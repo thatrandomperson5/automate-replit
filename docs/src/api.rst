@@ -7,6 +7,7 @@ API
 
     api/client
     api/queryResult
+    api/basic
     api/user
     api/notifications
     api/repl
