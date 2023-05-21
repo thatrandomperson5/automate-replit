@@ -67,19 +67,19 @@ class ReplitClient:
         rqs = self.requestCache[:amount]
         if len(rqs) == 0:
             return
-        print("Emptying cached objects")
+        # print("Emptying cached objects")
         rjson = [rq.json for rq in rqs]
         async with session.post(
             "https://replit.com/graphql", json=rjson, headers=self.headers
         ) as response:
-            print("Request made")
+            # print("Request made")
             if response.status != 200:
                 errText = await response.text()
                 for rq in rqs:
                     rq.fut.set_exception(RequestError(errText))  # Raise request errors for the batch
                     # assert rq.fut.done()
                     self.requestCache.remove(rq)
-                print("Futures Errored")
+                # print("Futures Errored")
                 # del self.requestCache[:amount]
                 return 
 
@@ -87,27 +87,26 @@ class ReplitClient:
             # print("Json parsed")
             # print("Packed and requested:", len(json), ". Futures left:", len(self.requestCache))
             for result, rq in zip(json, rqs):
-                print("Handling future")
+
                 if "errors" in result:  # Raise other errors
-                    rq.fut.set_exception(RequestError(result["errors"]["message"]))
+                    print(result["errors"])
+                    rq.fut.set_exception(RequestError(result["errors"][0]["message"]))
                     print(rq.fut.done())
                 else:
                     rq.fut.set_result(result)
                 # assert self.requestCache.find(rq.fut).done()
                 self.requestCache.remove(rq)
-                print("Future handled")
 
-            print("Futures resolved")
             # del self.requestCache[:amount]
 
     async def __request(self) -> bool:
         """Request a cache clearing, returns false if the request was dissmissed."""
-        print("Request: Awaiting limiter", self.limiter.has_capacity())
+        # print("Request: Awaiting limiter", self.limiter.has_capacity())
         if len(self.requestCache) < 1:
             print("Request Dismissed")
             return False
         await self.limiter.acquire()
-        print("Limiter aquired")
+        # print("Limiter aquired")
         if len(self.requestCache) > 0:
             # print("Clearing cache")
             await self.__clearCache()
