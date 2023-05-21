@@ -78,7 +78,7 @@ class ReplitClient:
                 for rq in rqs:
                     rq.fut.set_exception(RequestError(errText))  # Raise request errors for the batch
                     # assert rq.fut.done()
-                    self.requestCache.remove(rq.fut)
+                    self.requestCache.remove(rq)
                 print("Futures Errored")
                 # del self.requestCache[:amount]
                 return 
@@ -94,7 +94,7 @@ class ReplitClient:
                 else:
                     rq.fut.set_result(result)
                 # assert self.requestCache.find(rq.fut).done()
-                self.requestCache.remove(rq.fut)
+                self.requestCache.remove(rq)
                 print("Future handled")
 
             print("Futures resolved")
@@ -164,6 +164,7 @@ class ReplitClient:
         self.requestCache.append(CachedRequest(fut, json))
         # print("Added to cache, now requesting")
         loop.create_task(self.__request())
+        # await self.__request()
         return fut
         
 
