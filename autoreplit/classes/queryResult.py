@@ -49,4 +49,3 @@ class QueryResult(QueryResultBase):
             data = json
         self.__slots__ = data.keys()
         super().__init__(opname, json)
-        

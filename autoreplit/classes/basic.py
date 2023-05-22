@@ -4,12 +4,14 @@ from typing import cast
 from ..commonTyping import JsonType
 from .queryResult import QueryResultBase
 
+
 @dataclass
 class SimpleUser:
     """A simple user object, provides username and id."""
 
     username: str
     id: str
+
 
 @dataclass
 class BasicRepl:
@@ -18,6 +20,7 @@ class BasicRepl:
     id: str  #: The repl id
     url: str  #: The repl url
     title: Optional[str]  #: The repl title
+
 
 class BasicComment(QueryResultBase):
     """A basic comment class."""

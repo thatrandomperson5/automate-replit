@@ -24,8 +24,6 @@ class Role:
     tagline: str
 
 
-
-
 class User(QueryResultBase):
     """The user object. Contains user data."""
 
