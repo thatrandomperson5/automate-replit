@@ -2,20 +2,25 @@ import asyncio, aiohttp, aiolimiter
 from .querys import querys
 from .classes.user import User
 from .classes.basic import SimpleUser
-from .classes.queryResult import QueryResult, QueryResultBase
+from .classes.queryResult import QueryResult
 from .classes.notifications import makeNotification, UnidentifiedNotif, CommonNotif
 from .classes.repl import Repl
 from dataclasses import dataclass
+import traceback
+
 # Typing
 from types import CoroutineType
 from .commonTyping import JsonType
 from typing import Optional, Dict, Any, List
 
+
 @dataclass
 class CachedRequest:
     """A cached request for better preformance."""
+
     fut: asyncio.Future
     json: JsonType
+
 
 class RequestError(Exception):
     """Replit api request error."""
@@ -76,22 +81,23 @@ class ReplitClient:
             if response.status != 200:
                 errText = await response.text()
                 for rq in rqs:
-                    rq.fut.set_exception(RequestError(errText))  # Raise request errors for the batch
+                    rq.fut.set_exception(
+                        RequestError(errText)
+                    )  # Raise request errors for the batch
                     # assert rq.fut.done()
                     self.requestCache.remove(rq)
                 # print("Futures Errored")
                 # del self.requestCache[:amount]
-                return 
+                return
 
             json = await response.json()
             # print("Json parsed")
             # print("Packed and requested:", len(json), ". Futures left:", len(self.requestCache))
             for result, rq in zip(json, rqs):
-
                 if "errors" in result:  # Raise other errors
-                    print(result["errors"])
+                    # print(result["errors"])
                     rq.fut.set_exception(RequestError(result["errors"][0]["message"]))
-                    print(rq.fut.done())
+                    # print(rq.fut.done())
                 else:
                     rq.fut.set_result(result)
                 # assert self.requestCache.find(rq.fut).done()
@@ -103,18 +109,17 @@ class ReplitClient:
         """Request a cache clearing, returns false if the request was dissmissed."""
         # print("Request: Awaiting limiter", self.limiter.has_capacity())
         if len(self.requestCache) < 1:
-            print("Request Dismissed")
+            # print("Request Dismissed")
             return False
         await self.limiter.acquire()
         # print("Limiter aquired")
         if len(self.requestCache) > 0:
             # print("Clearing cache")
             await self.__clearCache()
-            
+
             return True
 
         return False
-            
 
     async def start(self) -> None:
         """Start the client, needs to be used first, before any other functions.
@@ -150,7 +155,19 @@ class ReplitClient:
         asyncio.run(inner())
 
     def __checkTask(self, task):
-        assert task.result() == None
+        task.remove_done_callback(self.__checkTask)
+        exc = task.exception()
+        if exc is not None:
+            amount = min(5, len(self.requestCache))
+            rqs = self.requestCache[:amount]
+            for rq in rqs:
+
+                err = RequestError("Failed to send end request: \n" + "".join(traceback.format_exception(exc)))
+
+                rq.fut.set_exception(err)
+                self.requestCache.remove(rq)
+            raise exc
+        # print("Task ended, current futures left: ", len(self.requestCache))
 
     def __gqlQuery(
         self, query: str, vars: JsonType, opname: Optional[str] = None
@@ -160,16 +177,16 @@ class ReplitClient:
         if opname != None:
             json["operationName"] = opname
         json = {"query": query, "variables": vars}
-        
+
         loop = asyncio.get_running_loop()
         fut = loop.create_future()
         self.requestCache.append(CachedRequest(fut, json))
         # print("Added to cache, now requesting")
+        # print("Task created")
         task = loop.create_task(self.__request())
         task.add_done_callback(self.__checkTask)
         # await self.__request()
         return fut
-        
 
     async def rawQuery(
         self, queryname: str, query: str, vars: JsonType = {}

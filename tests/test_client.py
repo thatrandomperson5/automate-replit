@@ -59,8 +59,9 @@ async def main():
     await notif()
     print(len(user.publicRepls))
     # await repl()
-    await asyncio.gather(*[tRaw(id) for id in user.publicRepls])
+    await asyncio.gather(*[tRaw(repl.id) for repl in user.publicRepls])
     print("Tests done!")
+
 
 print()
 client.run(main())
