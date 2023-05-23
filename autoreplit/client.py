@@ -111,7 +111,7 @@ class ReplitClient:
 
                     rq.fut.set_exception(RequestError(result["errors"][0]["message"]))
                     # print(rq.fut.done())
-                else:
+                elif not rq.fut.done():
                     print("Resolving hash (L115)", hash(rq.fut))
 
                     rq.fut.set_result(result)
