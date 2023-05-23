@@ -126,8 +126,6 @@ query Repl($id: String, $url: String) {
       }
       description(plainText: true)
       markdownDescription: description(plainText: false)
-      hasExplainCode
-      hasGenerateCode
       templateInfo {
         label
         iconUrl

@@ -11,7 +11,8 @@ import traceback
 # Typing
 from types import CoroutineType
 from .commonTyping import JsonType
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Callable
+from functools import wraps
 
 
 @dataclass
@@ -27,6 +28,14 @@ class RequestError(Exception):
 
     pass
 
+def requiresSid(f: Callable) -> Callable:
+    """Decorator to make a function require a sid to run."""
+    @wraps(f)
+    def inner(self, *args, **kwargs: Any) -> Any:
+        if self.sid is None:
+            raise ValueError("This method requries a sid in the client.")
+        return f(self, *args, **kwargs)
+    return inner
 
 class ReplitClient:
     """The replit client object.
@@ -81,6 +90,8 @@ class ReplitClient:
             if response.status != 200:
                 errText = await response.text()
                 for rq in rqs:
+                    print("Resolving errored hash (L93)", hash(rq.fut))
+
                     rq.fut.set_exception(
                         RequestError(errText)
                     )  # Raise request errors for the batch
@@ -96,9 +107,13 @@ class ReplitClient:
             for result, rq in zip(json, rqs):
                 if "errors" in result:  # Raise other errors
                     # print(result["errors"])
+                    print("Resolving errored hash (L110)", hash(rq.fut))
+
                     rq.fut.set_exception(RequestError(result["errors"][0]["message"]))
                     # print(rq.fut.done())
                 else:
+                    print("Resolving hash (L115)", hash(rq.fut))
+
                     rq.fut.set_result(result)
                 # assert self.requestCache.find(rq.fut).done()
                 self.requestCache.remove(rq)
@@ -163,7 +178,7 @@ class ReplitClient:
             for rq in rqs:
 
                 err = RequestError("Failed to send end request: \n" + "".join(traceback.format_exception(exc)))
-
+                print("Resolving errored hash ", hash(rq.fut))
                 rq.fut.set_exception(err)
                 self.requestCache.remove(rq)
             raise exc
@@ -207,6 +222,7 @@ class ReplitClient:
         result = await self.__gqlQuery(query, {"username": name}, "userByUsername")
         return User(result)
 
+    @requiresSid
     async def getCurrentUser(self) -> SimpleUser:
         """Get the current user. Returns a ``SimpleUser``"""
         query = querys["currentUser"]
@@ -214,10 +230,12 @@ class ReplitClient:
         result = result["data"]["currentUser"]
         return SimpleUser(result["username"], result["id"])
 
+    @requiresSid
     async def updatePresence(self) -> None:
         """Update your bot's presence, will set you to ``Online``"""
         query = querys["updatePresence"]
         await self.__gqlQuery(query, {}, "SitePresenceUpdate")
+
 
     async def getReplById(self, id: str) -> Repl:
         query = querys["repl"]
@@ -229,6 +247,7 @@ class ReplitClient:
         result = await self.__gqlQuery(query, {"url": url}, "repl")
         return Repl(result)
 
+    @requiresSid
     async def getNotifications(
         self, count: int = 10, seen: bool = False
     ) -> List[CommonNotif | UnidentifiedNotif]:

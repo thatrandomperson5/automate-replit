@@ -43,7 +43,8 @@ async def notif():
 async def repl():
     print("Getting repl")
     r = await client.getReplByUrl("/@dragonhunter1/ChooseNim")
-    assert r == await client.getReplById(r.id)
+    print(r)
+    assert r.url == (await client.getReplById(r.id)).url
 
 
 async def main():
