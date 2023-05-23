@@ -25,7 +25,7 @@ query Repl($id: String, $url: String) {
       origin {
         id
         title
-        url # Possibly?
+        url
       }
       lang {
         id
@@ -98,21 +98,6 @@ query Repl($id: String, $url: String) {
       isModelSolution
       isModelSolutionFork
       workspaceCta
-    #
-    #  submission {
-    #    id
-   #     timeSubmitted
-   #     timeLastReviewed
-    #    isGroupSubmission
-    #    author {
-    #      username
-    #    }
-    #    submissionGroup {
-    #      users {
-    #        username
-    #      }
-    #    }
-    #  }
       commentSettings {
         id
         enabled
@@ -151,31 +136,12 @@ query Repl($id: String, $url: String) {
         domain
         state
       }
-      # apexProxy
       replViewSettings {
         id
         defaultView
         replFile
         replImage
       }
-    #  powerUpCosts {
-    #    ... on UnauthorizedError {
-    #      message
-    #    }
-    #    ... on NotFoundError {
-    #      message
-    #    }
-    #    ... on PowerUpCostsType {
-    #      boost {
-    #        cycles
-    #        explanation
-    #      }
-    #      alwaysOn {
-    #        cycles
-    #        explanation
-    #      }
-    #    }
-    #  }
       isTutorial
     }
   }

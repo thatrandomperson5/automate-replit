@@ -58,7 +58,7 @@ async def main():
     await getEthan()
     await notif()
     print(len(user.publicRepls))
-    # await repl()
+    await repl()
     await asyncio.gather(*[tRaw(repl.id) for repl in user.publicRepls])
     print("Tests done!")
 
