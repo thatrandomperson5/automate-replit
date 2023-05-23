@@ -20,7 +20,6 @@ schema-gen = "autoreplit.schemagen:main"
 python = "^3.10.0"
 aiohttp = "^3.8.3"
 aiolimiter = ">=1.0.0"
-graphql-query = ">=1.0.3"
 
 graphql-py =  { version = ">=0.8.1", optional = true }
 
