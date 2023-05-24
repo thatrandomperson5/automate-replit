@@ -1,4 +1,5 @@
-from .querygen import OperationBase, QueryBase, TypedField
+from .querygen import OperationBase, QueryBase
+from .utils import TypedField
 from graphql_query import Variable, Argument
 
 
