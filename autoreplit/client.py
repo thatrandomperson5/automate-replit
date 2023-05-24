@@ -90,7 +90,7 @@ class ReplitClient:
             if response.status != 200:
                 errText = await response.text()
                 for rq in rqs:
-                    print("Resolving errored hash (L93)", hash(rq.fut))
+                    # print("Resolving errored hash (L93)", hash(rq.fut))
 
                     rq.fut.set_exception(
                         RequestError(errText)
@@ -105,14 +105,16 @@ class ReplitClient:
             # print("Json parsed")
             # print("Packed and requested:", len(json), ". Futures left:", len(self.requestCache))
             for result, rq in zip(json, rqs):
+                if not rq in self.requestCache[:amount]:
+                    continue
                 if "errors" in result:  # Raise other errors
                     # print(result["errors"])
-                    print("Resolving errored hash (L110)", hash(rq.fut))
+                    # print("Resolving errored hash (L110)", hash(rq.fut))
 
                     rq.fut.set_exception(RequestError(result["errors"][0]["message"]))
                     # print(rq.fut.done())
                 else:
-                    print("Resolving hash (L115)", hash(rq.fut))
+                    # print("Resolving hash (L115)", hash(rq.fut))
 
                     rq.fut.set_result(result)
                 # assert self.requestCache.find(rq.fut).done()
@@ -178,7 +180,7 @@ class ReplitClient:
             for rq in rqs:
 
                 err = RequestError("Failed to send end request: \n" + "".join(traceback.format_exception(exc)))
-                print("Resolving errored hash ", hash(rq.fut))
+                # print("Resolving errored hash ", hash(rq.fut))
                 rq.fut.set_exception(err)
                 self.requestCache.remove(rq)
             raise exc

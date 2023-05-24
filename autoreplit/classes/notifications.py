@@ -42,10 +42,10 @@ class UnidentifiedNotif(QueryResultBase):
         super().__init__(None, json)
 
 
-def makeNotification(json: JsonType) -> List[QueryResultBase]:
+def makeNotification(json: JsonType) -> List[CommonNotif | UnidentifiedNotif]:
     """Sort and type notif's."""
     data = json["data"]["notifications"]["items"]
-    result: List[QueryResultBase] = []
+    result: List[CommonNotif | UnidentifiedNotif] = []
     for item in data:
         match item["__typename"]:
             case "ReplCommentCreatedNotification" | "ReplCommentReplyCreatedNotification" | "ReplCommentMentionNotification" | "NewFollowerNotification":
