@@ -22,6 +22,8 @@ aiohttp = "^3.8.3"
 aiolimiter = ">=1.0.0"
 
 graphql-py =  { version = ">=0.8.1", optional = true }
+typing-extensions = "^4.6.1"
+graphql-query = {git = "https://github.com/thatrandomperson5/graphql-query-light.git"}
 
 
 

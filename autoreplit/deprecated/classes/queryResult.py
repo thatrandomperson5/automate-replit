@@ -1,4 +1,4 @@
-from ..commonTyping import JsonType
+from .. import JsonType
 from abc import ABCMeta
 from typing import Optional
 

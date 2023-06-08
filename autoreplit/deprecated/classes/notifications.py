@@ -1,4 +1,4 @@
-from ..commonTyping import JsonType
+from .. import JsonType
 from .basic import SimpleUser, BasicComment
 from .queryResult import QueryResultBase
 from typing import List, Optional, cast

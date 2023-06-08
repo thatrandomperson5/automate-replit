@@ -1,5 +1,5 @@
 from .basic import SimpleUser, BasicRepl
-from ..commonTyping import JsonType
+from .. import JsonType
 from .queryResult import QueryResultBase
 from typing import Optional
 

@@ -1,10 +1,5 @@
 import asyncio, aiohttp, aiolimiter
-from .querys import querys
-from .classes.user import User
-from .classes.basic import SimpleUser
-from .classes.queryResult import QueryResult
-from .classes.notifications import makeNotification, UnidentifiedNotif, CommonNotif
-from .classes.repl import Repl
+
 from dataclasses import dataclass
 import traceback
 
@@ -12,6 +7,16 @@ import traceback
 from types import CoroutineType
 from .commonTyping import JsonType
 from typing import Optional, Dict, Any, List
+from typing_extensions import deprecated
+
+
+# Deprecated
+from .deprecated.querys import querys
+from .deprecated.classes.user import User
+from .deprecated.classes.basic import SimpleUser
+from .deprecated.classes.queryResult import QueryResult
+from .deprecated.classes.notifications import makeNotification, UnidentifiedNotif, CommonNotif
+from .deprecated.classes.repl import Repl
 
 
 @dataclass
@@ -199,14 +204,16 @@ class ReplitClient:
         """
         json = await self.__gqlQuery(query, vars, queryname)
         # print(json)
-        return QueryResult(queryname, json)
+        return QueryResult(json, queryname)
 
+    @deprecated("Use `query` UserByUsername instead.")
     async def getUserByName(self, name: str) -> User:
         """Get a user by name. Returns an user object."""
         query = querys["userByUsername"]
         result = await self.__gqlQuery(query, {"username": name}, "userByUsername")
         return User(result)
 
+    @deprecated("Use `query` CurrentUser instead.")
     async def getCurrentUser(self) -> SimpleUser:
         """Get the current user. Returns a ``SimpleUser``"""
         query = querys["currentUser"]
@@ -215,20 +222,24 @@ class ReplitClient:
         return SimpleUser(result["username"], result["id"])
 
     async def updatePresence(self) -> None:
+        # Either deprecate for change
         """Update your bot's presence, will set you to ``Online``"""
         query = querys["updatePresence"]
         await self.__gqlQuery(query, {}, "SitePresenceUpdate")
-
+        
+    @deprecated("Use `query` Repl instead.")
     async def getReplById(self, id: str) -> Repl:
         query = querys["repl"]
         result = await self.__gqlQuery(query, {"id": id}, "repl")
         return Repl(result)
 
+    @deprecated("Use `query` Repl instead.")
     async def getReplByUrl(self, url: str) -> Repl:
         query = querys["repl"]
         result = await self.__gqlQuery(query, {"url": url}, "repl")
         return Repl(result)
 
+    @deprecated("Use `query` Notifications instead.")
     async def getNotifications(
         self, count: int = 10, seen: bool = False
     ) -> List[CommonNotif | UnidentifiedNotif]:

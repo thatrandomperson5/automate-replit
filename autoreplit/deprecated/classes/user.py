@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ..commonTyping import JsonType
+from .. import JsonType
 from .queryResult import QueryResultBase
 from .basic import BasicRepl
 from typing import Dict, List, Optional

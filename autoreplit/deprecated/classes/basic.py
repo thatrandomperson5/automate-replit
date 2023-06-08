@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 from typing import cast
-from ..commonTyping import JsonType
+from .. import JsonType
 from .queryResult import QueryResultBase
 
 

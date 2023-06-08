@@ -1,7 +1,7 @@
 import pydantic
 from abc import ABC
 from typing import Optional, Generic, TypeVar, TypeAlias
-from .commonTyping import JsonType
+from ..commonTyping import JsonType
 from types import MappingProxyType
 
 class ResultObject(MappingProxyType):
