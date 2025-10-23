@@ -1,3 +1,5 @@
+# NOTICE: This project will likley no longer be maintained
+
 # Automate Replit
 [![Documentation Status](https://readthedocs.org/projects/automate-replit/badge/?version=latest)](https://automate-replit.readthedocs.io/en/latest/?badge=latest)
 
@@ -16,17 +18,17 @@ from autoreplit import ReplitClient
 
 client = ReplitClient()
 
-async def getEthan():
-    ethan = await client.getUserByName("not-ethan")
-    print(f"Ethan's id: {ethan.id}")
-    print(f"Ethan's follower count: {ethan.followerCount}")
-    if ethan.isOnline:
-        print("Ethan is online!")
+async def getUser():
+    user = await client.getUserByName("username")
+    print(f"User's id: {user.id}")
+    print(f"User's follower count: {user.followerCount}")
+    if user.isOnline:
+        print("User is online!")
     else:
-        print(f"Ethan was last seen {ethan.lastSeen}")
-    print(f"Ethan's roles: {ethan.roles}")
-    print(f"All of ethan: {ethan}")
+        print(f"User was last seen {user.lastSeen}")
+    print(f"User's roles: {user.roles}")
+    print(f"All of user: {user}")
 
-client.run(getEthan())
+client.run(getUser())
 ```
 **Note**: pass a sid to get better info
